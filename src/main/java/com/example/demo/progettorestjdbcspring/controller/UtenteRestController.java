@@ -28,10 +28,10 @@ public class UtenteRestController {
         return utente.getNome() + " " + utente.getCognome();
     }
 
-    @RequestMapping(path = "insert",
+    @RequestMapping(path = "/insert/{nome}/{cogn}/{user}/{pass}",
             method = RequestMethod.GET)
-    public String insert(@RequestParam("nome") String nome, @RequestParam("cogn") String cogn,
-                         @RequestParam("user") String user, @RequestParam("password") String password) {
+    public String insert(@PathVariable("nome") String nome, @PathVariable("cogn") String cogn,
+                         @PathVariable("user") String user, @PathVariable("pass") String password) {
         if (utenteGeneralDao.insert(new Utente(nome, cogn, user, password)))
             return "OK!";
         return "Errore nell'inserimento!";
@@ -52,8 +52,9 @@ public class UtenteRestController {
         return "Tabella utente vuota!";
     }
 
-    @RequestMapping(path = "/selectByUser/{user}",
-            method = RequestMethod.GET)
+    @RequestMapping(path = {"/selectByUser/{user}","/selectAnUtenteByUser/{user}"},
+            method = {RequestMethod.GET,RequestMethod.POST},
+            produces = "text/plain")
     public String selectByUser(@PathVariable("user") String user) {
         Utente utente = utenteDao.selectByUser(user);
         if (utente != null)
